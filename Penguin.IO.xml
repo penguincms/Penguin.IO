@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Penguin.IO</name>
+    </assembly>
+    <members>
+        <member name="T:Penguin.IO.Compression.GZip">
+            <summary>
+            Simplifys data compression using GZip
+            </summary>
+        </member>
+        <member name="M:Penguin.IO.Compression.GZip.Compress(System.String)">
+            <summary>
+            Compresses the input string
+            </summary>
+            <param name="source">The string to compress</param>
+            <returns>A GZipped byte array representing the string</returns>
+        </member>
+        <member name="M:Penguin.IO.Compression.GZip.CopyTo(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Copies from one stream to another
+            </summary>
+            <param name="src">The source stream</param>
+            <param name="dest">The destination stream</param>
+        </member>
+        <member name="M:Penguin.IO.Compression.GZip.Decompress(System.Byte[])">
+            <summary>
+            Decompresses the provided byte array into its source string representation
+            </summary>
+            <param name="source">The byte array to decompress</param>
+            <returns>The original string before it was compressed</returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
+            <summary>
+            Reads a file to a datatable
+            </summary>
+            <param name="file">The file info to read</param>
+            <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
+            <returns>A data table representing the contents of the source fileinfo</returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.StreamExtensions.ReadFully(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads data from a stream until the end is reached. The
+            data is returned as a byte array. An IOException is
+            thrown if any of the underlying IO calls fail.
+            </summary>
+            <param name="stream">The stream to read data from</param>
+            <param name="initialLength">The initial buffer length</param>
+        </member>
+        <member name="T:Penguin.IO.Objects.BufferedFileReader">
+            <summary>
+            A stream reader that buffers and chunks out the source file to prevent slowdowns when requesting single characters
+            </summary>
+        </member>
+        <member name="P:Penguin.IO.Objects.BufferedFileReader.Progress">
+            <summary>
+            A decimal representing the % of the way the pointer is through the base stream AND buffer
+            </summary>
+        </member>
+        <member name="P:Penguin.IO.Objects.BufferedFileReader.EndOfStream">
+            <summary>
+            True if the base reader has reached the end of the stream, and the reader has reached the end of its buffer
+            </summary>
+        </member>
+        <member name="M:Penguin.IO.Objects.BufferedFileReader.#ctor(System.String,System.Int64)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="path">The path of the file to read</param>
+            <param name="BufferSize">The number of characters of the file to buffer into memory</param>
+        </member>
+        <member name="M:Penguin.IO.Objects.BufferedFileReader.Read">
+            <summary>
+            Reads the next int from the buffer and if necessary, refills it
+            </summary>
+            <returns>The next int from the buffer</returns>
+        </member>
+        <member name="T:Penguin.IO.Objects.FileUtil">
+            <summary>
+            Provides interop access to a file for requesting information from the OS
+            </summary>
+        </member>
+        <member name="M:Penguin.IO.Objects.FileUtil.WhoIsLocking(System.String)">
+             <summary>
+             Find out what process(es) have a lock on the specified file.
+             </summary>
+             <param name="path">Path of the file.</param>
+             <returns>Processes locking the file</returns>
+             <remarks>See also:
+             http://msdn.microsoft.com/en-us/library/windows/desktop/aa373661(v=vs.85).aspx
+             http://wyupdate.googlecode.com/svn-history/r401/trunk/frmFilesInUse.cs (no copyright in code at time of viewing)
+            
+             </remarks>
+        </member>
+        <member name="T:Penguin.IO.Serialization.XML">
+            <summary>
+            Contains methods for interacting with Xml strings
+            </summary>
+        </member>
+        <member name="M:Penguin.IO.Serialization.XML.ToObject``1(System.String)">
+            <summary>
+            Deserializes and object from an XML string or file
+            </summary>
+            <typeparam name="T">The resulting object type</typeparam>
+            <param name="source">The source file or XML string</param>
+            <returns>The deserialized object</returns>
+        </member>
+    </members>
+</doc>
