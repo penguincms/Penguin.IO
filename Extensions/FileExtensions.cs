@@ -23,7 +23,21 @@ namespace Penguin.IO.Extensions
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         public static DataTable ReadToDataTable(this FileInfo file, bool HasHeaders = true, Func<string, string> ProcessRow = null)
         {
-            Queue<string> Lines = File.ReadAllLines(file.FullName).ToQueue();
+            return ReadToDataTable(File.ReadAllLines(file.FullName).ToList(), HasHeaders, ProcessRow);
+        }
+
+        /// <summary>
+        /// Reads a list of strings representing CSV lines to a datatable
+        /// </summary>
+        /// <param name="FileLines">The CSV lines</param>
+        /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+        /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
+        /// <returns>A data table representing the contents of the source fileinfo</returns>
+        public static DataTable ReadToDataTable(List<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null)
+        {
+            Queue<string> Lines = FileLines.ToQueue();
+
+
             DataTable toReturn = new DataTable();
 
             if (HasHeaders)
@@ -59,7 +73,6 @@ namespace Penguin.IO.Extensions
 
             return toReturn;
         }
-
         #endregion Methods
     }
 }

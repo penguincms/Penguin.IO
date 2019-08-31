@@ -39,6 +39,15 @@
             <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
             <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
+        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.Collections.Generic.List{System.String},System.Boolean,System.Func{System.String,System.String})">
+            <summary>
+            Reads a list of strings representing CSV lines to a datatable
+            </summary>
+            <param name="FileLines">The CSV lines</param>
+            <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
+            <returns>A data table representing the contents of the source fileinfo</returns>
+        </member>
         <member name="M:Penguin.IO.Extensions.StreamExtensions.ReadFully(System.IO.Stream,System.Int32)">
             <summary>
             Reads data from a stream until the end is reached. The
