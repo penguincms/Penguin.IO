@@ -1,13 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Penguin.IO.Objects
 {
     /// <summary>
     /// A stream reader that buffers and chunks out the source file to prevent slowdowns when requesting single characters
     /// </summary>
+    [ObsoleteAttribute("This doesn't need to exist")]
     public class BufferedFileReader : StreamReader
     {
-        #region Properties
+        /// <summary>
+        /// True if the base reader has reached the end of the stream, and the reader has reached the end of its buffer
+        /// </summary>
+        public new bool EndOfStream => this.BufferPointer == this.Buffer.Length && base.EndOfStream;
 
         /// <summary>
         /// A decimal representing the % of the way the pointer is through the base stream AND buffer
@@ -23,15 +28,6 @@ namespace Penguin.IO.Objects
         }
 
         /// <summary>
-        /// True if the base reader has reached the end of the stream, and the reader has reached the end of its buffer
-        /// </summary>
-        public new bool EndOfStream => this.BufferPointer == this.Buffer.Length && base.EndOfStream;
-
-        #endregion Properties
-
-        #region Constructors
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="path">The path of the file to read</param>
@@ -41,10 +37,6 @@ namespace Penguin.IO.Objects
             this.Buffer = new char[BufferSize];
             this.FillBuffer();
         }
-
-        #endregion Constructors
-
-        #region Methods
 
         /// <summary>
         /// Reads the next int from the buffer and if necessary, refills it
@@ -60,14 +52,8 @@ namespace Penguin.IO.Objects
             return this.Buffer[this.BufferPointer++];
         }
 
-        #endregion Methods
-
-        #region Fields
-
         private char[] Buffer;
         private long BufferPointer = 0;
-
-        #endregion Fields
 
         private void FillBuffer()
         {

@@ -4,11 +4,10 @@ using System.IO;
 namespace Penguin.IO.Extensions
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
     public static class StreamExtensions
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
-        #region Methods
-
         /// <summary>
         /// Reads data from a stream until the end is reached. The
         /// data is returned as a byte array. An IOException is
@@ -60,7 +59,5 @@ namespace Penguin.IO.Extensions
             Array.Copy(buffer, ret, read);
             return ret;
         }
-
-        #endregion Methods
     }
 }

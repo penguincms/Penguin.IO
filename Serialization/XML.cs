@@ -7,8 +7,6 @@ namespace Penguin.IO.Serialization
     /// </summary>
     public static class XML
     {
-        #region Methods
-
         /// <summary>
         /// Deserializes and object from an XML string or file
         /// </summary>
@@ -34,7 +32,5 @@ namespace Penguin.IO.Serialization
                 }
             }
         }
-
-        #endregion Methods
     }
 }

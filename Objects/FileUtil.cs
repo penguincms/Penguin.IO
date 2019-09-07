@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Penguin.IO.Objects
@@ -11,8 +10,6 @@ namespace Penguin.IO.Objects
     /// </summary>
     static public class FileUtil
     {
-        #region Methods
-
         /// <summary>
         /// Find out what process(es) have a lock on the specified file.
         /// </summary>
@@ -99,19 +96,11 @@ namespace Penguin.IO.Objects
             return processes;
         }
 
-        #endregion Methods
-
-        #region Fields
-
         private const int CCH_RM_MAX_APP_NAME = 255;
 
         private const int CCH_RM_MAX_SVC_NAME = 63;
 
         private const int RmRebootReasonNone = 0;
-
-        #endregion Fields
-
-        #region Structs
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct RM_PROCESS_INFO
@@ -139,10 +128,6 @@ namespace Penguin.IO.Objects
             public System.Runtime.InteropServices.ComTypes.FILETIME ProcessStartTime;
         }
 
-        #endregion Structs
-
-        #region Enums
-
         private enum RM_APP_TYPE
         {
             RmUnknownApp = 0,
@@ -153,8 +138,6 @@ namespace Penguin.IO.Objects
             RmConsole = 5,
             RmCritical = 1000
         }
-
-        #endregion Enums
 
         [DllImport("rstrtmgr.dll")]
         private static extern int RmEndSession(uint pSessionHandle);

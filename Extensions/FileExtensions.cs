@@ -9,11 +9,10 @@ using System.Linq;
 namespace Penguin.IO.Extensions
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
     public static class FileExtensions
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
-        #region Methods
-
         /// <summary>
         /// Reads a file to a datatable
         /// </summary>
@@ -36,7 +35,6 @@ namespace Penguin.IO.Extensions
         public static DataTable ReadToDataTable(List<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null)
         {
             Queue<string> Lines = FileLines.ToQueue();
-
 
             DataTable toReturn = new DataTable();
 
@@ -73,6 +71,5 @@ namespace Penguin.IO.Extensions
 
             return toReturn;
         }
-        #endregion Methods
     }
 }

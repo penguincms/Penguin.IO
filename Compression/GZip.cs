@@ -9,8 +9,6 @@ namespace Penguin.IO.Compression
     /// </summary>
     public static class GZip
     {
-        #region Methods
-
         /// <summary>
         /// Compresses the input string
         /// </summary>
@@ -73,7 +71,5 @@ namespace Penguin.IO.Compression
                 }
             }
         }
-
-        #endregion Methods
     }
 }
