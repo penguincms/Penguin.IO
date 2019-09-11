@@ -1,11 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <PackageProjectUrl>http://www.penguinms.com/Nuget</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/penguincms/Penguin.IO</PackageProjectUrl>
 	<PackageIconUrl>http://www.penguinms.com/client/images/pg.png</PackageIconUrl>
     <Version>1.1.9</Version>
+	<IncludeSymbols>true</IncludeSymbols>    
+<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>IO Objects and methods. Notable functionality includes a method for converting a CSV into a DataTable and a FileReader that buffers input (for speed),</Description>
@@ -29,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Penguin.Extensions.Collections" Version="1.1.7" />
-    <PackageReference Include="Penguin.Extensions.String" Version="1.1.8" />
+    <PackageReference Include="Penguin.Extensions.Collections" Version="1.2.1" />
+    <PackageReference Include="Penguin.Extensions.String" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
