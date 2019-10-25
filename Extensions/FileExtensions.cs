@@ -1,5 +1,5 @@
 ﻿using Penguin.Extensions.Collections;
-using Penguin.Extensions.String;
+using Penguin.Extensions.Strings;
 using System;
 using System.Collections.Generic;
 using System.Data;
