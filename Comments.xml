@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Penguin.IO.Local</name>
+        <name>Penguin.IO</name>
     </assembly>
     <members>
         <member name="T:Penguin.IO.Compression.GZip">
