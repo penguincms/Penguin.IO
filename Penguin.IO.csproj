@@ -6,6 +6,7 @@
     <Description>IO Objects and methods. Notable functionality includes a method for converting a CSV into a DataTable and a FileReader that buffers input (for speed),</Description>
     <AssemblyName>Penguin.IO</AssemblyName>
     <RootNamespace>Penguin.IO</RootNamespace>
+    <DocumentationFile>Penguin.IO.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Penguin.Extensions.Collections" Version="2.0.4-T9QC72V" />
