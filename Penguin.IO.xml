@@ -39,7 +39,25 @@
             <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
             <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.Collections.Generic.List{System.String},System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:Penguin.IO.Extensions.FileExtensions.ToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
+            <summary>
+            Reads a file to a datatable
+            </summary>
+            <param name="file">The file info to read</param>
+            <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
+            <returns>A data table representing the contents of the source fileinfo</returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
+            <summary>
+            Reads a list of strings representing CSV lines to a datatable
+            </summary>
+            <param name="FileLines">The CSV lines</param>
+            <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
+            <returns>A data table representing the contents of the source fileinfo</returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.FileExtensions.ToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Reads a list of strings representing CSV lines to a datatable
             </summary>

@@ -22,11 +22,10 @@ namespace Penguin.IO.Objects
         /// </remarks>
         static public List<Process> WhoIsLocking(string path)
         {
-            uint handle;
             string key = Guid.NewGuid().ToString();
             List<Process> processes = new List<Process>();
 
-            int res = RmStartSession(out handle, 0, key);
+            int res = RmStartSession(out uint handle, 0, key);
             if (res != 0)
             {
                 throw new Exception("Could not begin restart session.  Unable to determine file locker.");
@@ -35,9 +34,8 @@ namespace Penguin.IO.Objects
             try
             {
                 const int ERROR_MORE_DATA = 234;
-                uint pnProcInfoNeeded = 0,
-                     pnProcInfo = 0,
-                     lpdwRebootReasons = RmRebootReasonNone;
+                uint pnProcInfo = 0,
+                     lpdwRebootReasons = RM_REBOOT_REASON_NONE;
 
                 string[] resources = new string[] { path }; // Just checking on one resource.
 
@@ -51,7 +49,7 @@ namespace Penguin.IO.Objects
                 // Note: there's a race condition here -- the first call to RmGetList() returns
                 //      the total number of process. However, when we call RmGetList() again to get
                 //      the actual processes this number may have increased.
-                res = RmGetList(handle, out pnProcInfoNeeded, ref pnProcInfo, null, ref lpdwRebootReasons);
+                res = RmGetList(handle, out uint pnProcInfoNeeded, ref pnProcInfo, null, ref lpdwRebootReasons);
 
                 if (res == ERROR_MORE_DATA)
                 {
@@ -100,7 +98,7 @@ namespace Penguin.IO.Objects
 
         private const int CCH_RM_MAX_SVC_NAME = 63;
 
-        private const int RmRebootReasonNone = 0;
+        private const int RM_REBOOT_REASON_NONE = 0;
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct RM_PROCESS_INFO
