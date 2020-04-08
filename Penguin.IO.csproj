@@ -9,7 +9,7 @@
     <DocumentationFile>Penguin.IO.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Penguin.Extensions.Collections" Version="2.0.4-T9SPWN8" />
+    <PackageReference Include="Penguin.Extensions.Collections" Version="2.0.4-T9UEEAT" />
   </ItemGroup>
   <Import Project="Penguin.Projects.Shared\Penguin.Projects.Shared.csproj" />
 </Project>
