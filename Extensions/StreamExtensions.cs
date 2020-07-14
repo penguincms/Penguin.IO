@@ -17,6 +17,10 @@ namespace Penguin.IO.Extensions
         /// <param name="initialLength">The initial buffer length</param>
         public static byte[] ReadFully(this Stream stream, int initialLength)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
             // If we've been passed an unhelpful initial length, just
             // use 32K.
             if (initialLength < 1)

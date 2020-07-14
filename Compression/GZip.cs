@@ -40,6 +40,16 @@ namespace Penguin.IO.Compression
         /// <param name="dest">The destination stream</param>
         public static void CopyTo(Stream src, Stream dest)
         {
+            if (src is null)
+            {
+                throw new System.ArgumentNullException(nameof(src));
+            }
+
+            if (dest is null)
+            {
+                throw new System.ArgumentNullException(nameof(dest));
+            }
+
             byte[] bytes = new byte[4096];
 
             int cnt;
