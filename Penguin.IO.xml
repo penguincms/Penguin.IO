@@ -30,7 +30,37 @@
             <param name="source">The byte array to decompress</param>
             <returns>The original string before it was compressed</returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:Penguin.IO.Extensions.DirectoryInfoExtensions.EnumerateFiles(System.IO.DirectoryInfo,System.Action{System.IO.DirectoryInfo,System.Exception},System.String,System.IO.SearchOption)">
+            <summary>
+            Enumerate files but calls an exception handler method for exceptions instead of bombing out
+            </summary>
+            <param name="di">Target DirectoryInfo</param>
+            <param name="onError">Action to call on error</param>
+            <param name="searchPattern">Search mask. * by default</param>
+            <param name="searchOption">Recursive or not. Recursive by default</param>
+            <returns></returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.DirectoryInfoExtensions.EnumerateDirectories(System.IO.DirectoryInfo,System.Action{System.IO.DirectoryInfo,System.Exception},System.String,System.IO.SearchOption)">
+            <summary>
+            Enumerate Directories but calls an exception handler method for exceptions instead of bombing out
+            </summary>
+            <param name="di">Target DirectoryInfo</param>
+            <param name="onError">Action to call on error</param>
+            <param name="searchPattern">Search mask. * by default</param>
+            <param name="searchOption">Recursive or not. Recursive by default</param>
+            <returns></returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.DirectoryInfoExtensions.EnumerateFileSystemInfos(System.IO.DirectoryInfo,System.Action{System.IO.DirectoryInfo,System.Exception},System.String,System.IO.SearchOption)">
+            <summary>
+            Enumerate FileSystemInfos but calls an exception handler method for exceptions instead of bombing out
+            </summary>
+            <param name="di">Target DirectoryInfo</param>
+            <param name="onError">Action to call on error</param>
+            <param name="searchPattern">Search mask. * by default</param>
+            <param name="searchOption">Recursive or not. Recursive by default</param>
+            <returns></returns>
+        </member>
+        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Reads a file to a datatable
             </summary>
@@ -39,7 +69,7 @@
             <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
             <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileExtensions.ToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ToDataTable(System.IO.FileInfo,System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Reads a file to a datatable
             </summary>
@@ -48,7 +78,7 @@
             <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
             <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileExtensions.ReadToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Reads a list of strings representing CSV lines to a datatable
             </summary>
@@ -57,7 +87,7 @@
             <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
             <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileExtensions.ToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
+        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ToDataTable(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Func{System.String,System.String})">
             <summary>
             Reads a list of strings representing CSV lines to a datatable
             </summary>
