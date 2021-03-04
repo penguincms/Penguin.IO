@@ -1,5 +1,7 @@
 ﻿using Penguin.Extensions.Collections;
 using Penguin.Extensions.Strings;
+using Penguin.IO.Exceptions;
+using Penguin.IO.Objects;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,6 +26,7 @@ namespace Penguin.IO.Extensions
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         [Obsolete("Use ToDataTable", false)]
         public static DataTable ReadToDataTable(this FileInfo file, bool HasHeaders = true, Func<string, string> ProcessRow = null) => ToDataTable(file, HasHeaders, ProcessRow);
+
         /// <summary>
         /// Reads a file to a datatable
         /// </summary>
@@ -51,6 +54,64 @@ namespace Penguin.IO.Extensions
         [Obsolete("Use ToDataTable", false)]
         public static DataTable ReadToDataTable(this IEnumerable<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null) => FileLines.ToDataTable(HasHeaders, ProcessRow);
 
+        public static FileMoveResult MoveTo(this FileInfo file, string newPath, ExistingFileBehaviour behaviour)
+        {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (newPath is null)
+            {
+                throw new ArgumentNullException(nameof(newPath));
+            }
+
+            if (!File.Exists(newPath))
+            {
+                file.MoveTo(newPath);
+
+                return new FileMoveResult()
+                {
+                    FileInfo = new FileInfo(newPath),
+                    Result = FileMoveResultKind.Moved
+                };
+            } else
+            {
+                switch(behaviour)
+                {
+                    case ExistingFileBehaviour.Error:
+                        throw new FileAlreadyExistsException();
+                    case ExistingFileBehaviour.Overwrite:
+                        File.Delete(newPath);
+                        file.MoveTo(newPath);
+                        return new FileMoveResult()
+                        {
+                            FileInfo = new FileInfo(newPath),
+                            Result = FileMoveResultKind.Overwritten
+                        };
+
+                    case ExistingFileBehaviour.Rename:
+                        newPath = IOHelper.FindFileName(newPath);
+                        file.MoveTo(newPath);
+                        return new FileMoveResult()
+                        {
+                            FileInfo = new FileInfo(newPath),
+                            Result = FileMoveResultKind.Renamed
+                        };
+
+                    case ExistingFileBehaviour.Skip:
+                        return new FileMoveResult()
+                        {
+                            FileInfo = new FileInfo(file.FullName),
+                            Result = FileMoveResultKind.Skipped
+                        };
+
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
+
         /// <summary>
         /// Reads a list of strings representing CSV lines to a datatable
         /// </summary>
@@ -58,7 +119,7 @@ namespace Penguin.IO.Extensions
         /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
-        
+
         public static DataTable ToDataTable(this IEnumerable<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null)
         {
             if (FileLines is null)
@@ -69,7 +130,7 @@ namespace Penguin.IO.Extensions
             DataTable toReturn = new DataTable();
 
             IEnumerator<string> LinesEnumerator = FileLines.GetEnumerator();
-          
+
             bool hasNextLine = LinesEnumerator.MoveNext();
 
             if (HasHeaders)
