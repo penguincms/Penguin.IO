@@ -67,5 +67,43 @@ namespace Penguin.IO.Objects
 
             return newPath;
         }
+
+        public static string DisplaySize(long size, string format = "#.00")
+        {
+            string strSize = "b";
+
+            int b = 0;
+            
+            float fSize = size;
+
+
+            while (fSize >= 1000)
+            {
+                fSize /= 1000;
+
+                b++;
+            }
+
+            switch (b)
+            {
+                case 0:
+                    strSize = "b";
+                    break;
+                case 1:
+                    strSize = "Kb";
+                    break;
+                case 2:
+                    strSize = "Mb";
+                    break;
+                case 3:
+                    strSize = "Gb";
+                    break;
+                case 4:
+                    strSize = "Tb";
+                    break;
+            }
+
+            return $"{fSize.ToString(format)} {strSize}";
+        }
     }
 }

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageProjectUrl>https://github.com/penguincms/Penguin.IO</PackageProjectUrl>
-    <Version>5.0.1</Version>
+    <Version>5.0.5</Version>
     <Description>IO Objects and methods. Notable functionality includes a method for converting a CSV into a DataTable and a FileReader that buffers input (for speed),</Description>
     <AssemblyName>Penguin.IO</AssemblyName>
     <RootNamespace>Penguin.IO</RootNamespace>
