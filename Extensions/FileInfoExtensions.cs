@@ -1,4 +1,5 @@
 ﻿using Penguin.Extensions.Collections;
+using Penguin.Extensions.String;
 using Penguin.Extensions.Strings;
 using Penguin.IO.Exceptions;
 using Penguin.IO.Objects;
@@ -21,39 +22,124 @@ namespace Penguin.IO.Extensions
         /// Reads a file to a datatable
         /// </summary>
         /// <param name="file">The file info to read</param>
-        /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+        /// <param name="options">Optional Csv parsing options</param>
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         [Obsolete("Use ToDataTable", false)]
-        public static DataTable ReadToDataTable(this FileInfo file, bool HasHeaders = true, Func<string, string> ProcessRow = null) => ToDataTable(file, HasHeaders, ProcessRow);
+        public static DataTable ReadToDataTable(this FileInfo file, CsvOptions options = null, Func<string, string> ProcessRow = null) => ToDataTable(file, options, ProcessRow);
 
         /// <summary>
         /// Reads a file to a datatable
         /// </summary>
         /// <param name="file">The file info to read</param>
-        /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+        /// <param name="options">Optional Csv parsing options</param>
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
-        public static DataTable ToDataTable(this FileInfo file, bool HasHeaders = true, Func<string, string> ProcessRow = null)
+        public static DataTable ToDataTable(this FileInfo file, CsvOptions options = null, Func<string, string> ProcessRow = null)
         {
+            options = options ?? new CsvOptions();
+
             if(file is null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return ToDataTable(File.ReadAllText(file.FullName).SplitQuotedString('\n', false).Select(l => l.Trim('\r')), HasHeaders, ProcessRow);
+            long fileLength = file.Length;
+
+            IEnumerable<char> toParse = null;
+
+            if(fileLength < 2_000_000_000)
+            {
+                toParse = File.ReadAllText(file.FullName);
+            } else
+            {
+                toParse = ReadFile(file.FullName);
+            }
+
+            return ToDataTable(toParse.SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r')), options, ProcessRow);
         }
 
+        /// <summary>
+        /// Reads a file as an IEnumerable of strings, seperated by CSV line. This means that CSV cells may contain newlines
+        /// </summary>
+        /// <param name="fi">the File Info</param>
+        /// <param name="lineDelimeter">The character to be user for line breaks</param>
+        /// <returns>An IEnumerable of CSV lines</returns>
+        public static IEnumerable<string> ReadCsvLines(this FileInfo fi, char lineDelimeter = '\n')
+        {
+            if (fi is null)
+            {
+                throw new ArgumentNullException(nameof(fi));
+            }
+
+            return ReadFile(fi).SplitCsvLines(lineDelimeter).Select(l => l.Trim('\r'));
+        }
+
+        private static IEnumerable<string> SplitCsvLines(this IEnumerable<char> source, char lineDelimeter)
+        {
+            return source.SplitQuotedString(new QuotedStringOptions() { RemoveQuotes = false, ItemDelimeter = lineDelimeter });
+        }
+        /// <summary>
+        /// Reads an IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values
+        /// </summary>
+        /// <param name="fi">The file info to read</param>
+        /// <param name="options"></param>
+        /// <returns>An IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values</returns>
+        public static IEnumerable<IEnumerable<string>> ReadCsvItems(this FileInfo fi, CsvOptions options = null)
+        {
+            options = options ?? new CsvOptions();
+
+            if (fi is null)
+            {
+                throw new ArgumentNullException(nameof(fi));
+            }
+
+            return ReadFile(fi).SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r').SplitQuotedString(options));
+        }
+
+        /// <summary>
+        /// Reads a file as an IEnumerable of characters
+        /// </summary>
+        /// <param name="fi">The file to read</param>
+        /// <returns>The IEnumerable of characters representing the content</returns>
+        public static IEnumerable<char> ReadFile(this FileInfo fi)
+        {
+            if (fi is null)
+            {
+                throw new ArgumentNullException(nameof(fi));
+            }
+
+            return ReadFile(fi.FullName);
+        }
+
+        private static IEnumerable<char> ReadFile(string filePath)
+        {
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                int i;
+                while((i = sr.Read()) != -1)
+                {
+                    yield return (char)i;
+                }
+            }
+        }
         /// <summary>
         /// Reads a list of strings representing CSV lines to a datatable
         /// </summary>
         /// <param name="FileLines">The CSV lines</param>
-        /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+        /// <param name="options">Optional csv parsing options</param>
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         [Obsolete("Use ToDataTable", false)]
-        public static DataTable ReadToDataTable(this IEnumerable<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null) => FileLines.ToDataTable(HasHeaders, ProcessRow);
+        public static DataTable ReadToDataTable(this IEnumerable<string> FileLines, CsvOptions options = null, Func<string, string> ProcessRow = null) => FileLines.ToDataTable(options, ProcessRow);
 
+        /// <summary>
+        /// Moves a file info to a new location, allowing specification of behaviour
+        /// </summary>
+        /// <param name="file">The file to move</param>
+        /// <param name="newPath">The target path for the file</param>
+        /// <param name="behaviour">How conflicting files should be handled</param>
+        /// <returns>An object containing information relevant to the operation</returns>
         public static FileMoveResult MoveTo(this FileInfo file, string newPath, ExistingFileBehaviour behaviour)
         {
             if (file is null)
@@ -116,12 +202,14 @@ namespace Penguin.IO.Extensions
         /// Reads a list of strings representing CSV lines to a datatable
         /// </summary>
         /// <param name="FileLines">The CSV lines</param>
-        /// <param name="HasHeaders">A bool indicating if the first row is a header row</param>
+        /// <param name="options">Optional csv parsing options</param>
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
 
-        public static DataTable ToDataTable(this IEnumerable<string> FileLines, bool HasHeaders = true, Func<string, string> ProcessRow = null)
+        public static DataTable ToDataTable(this IEnumerable<string> FileLines, CsvOptions options = null, Func<string, string> ProcessRow = null)
         {
+            options = options ?? new CsvOptions();
+
             if (FileLines is null)
             {
                 throw new ArgumentNullException(nameof(FileLines));
@@ -133,7 +221,7 @@ namespace Penguin.IO.Extensions
 
             bool hasNextLine = LinesEnumerator.MoveNext();
 
-            if (HasHeaders)
+            if (options.HasHeaders)
             {
                 foreach (string Header in LinesEnumerator.Current.SplitQuotedString())
                 {
