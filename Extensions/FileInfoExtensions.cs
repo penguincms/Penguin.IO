@@ -1,5 +1,4 @@
 ﻿using Penguin.Extensions.Collections;
-using Penguin.Extensions.String;
 using Penguin.Extensions.Strings;
 using Penguin.IO.Exceptions;
 using Penguin.IO.Objects;
@@ -223,7 +222,7 @@ namespace Penguin.IO.Extensions
 
             if (options.HasHeaders)
             {
-                foreach (string Header in LinesEnumerator.Current.SplitQuotedString())
+                foreach (string Header in LinesEnumerator.Current.SplitQuotedString(options))
                 {
                     toReturn.Columns.Add(new DataColumn(Header));
                 }
@@ -237,7 +236,7 @@ namespace Penguin.IO.Extensions
                     throw new ArgumentException(NO_LINES_MESSAGE, nameof(FileLines));
                 }
 
-                foreach (string _ in LinesEnumerator.Current.SplitQuotedString())
+                foreach (string _ in LinesEnumerator.Current.SplitQuotedString(options))
                 {
                     toReturn.Columns.Add(new DataColumn());
                 }
@@ -247,7 +246,7 @@ namespace Penguin.IO.Extensions
             {
                 List<object> items = new List<object>();
 
-                foreach (string Column in LinesEnumerator.Current.SplitQuotedString())
+                foreach (string Column in LinesEnumerator.Current.SplitQuotedString(options))
                 {
                     items.Add(ProcessRow != null ? ProcessRow(Column) : Column);
                 }
