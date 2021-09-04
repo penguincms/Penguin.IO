@@ -8,7 +8,7 @@ namespace Penguin.IO.Objects
     /// <summary>
     /// Provides interop access to a file for requesting information from the OS
     /// </summary>
-    static public class FileUtil
+    public static class FileUtil
     {
         /// <summary>
         /// Find out what process(es) have a lock on the specified file.
@@ -20,7 +20,7 @@ namespace Penguin.IO.Objects
         /// http://wyupdate.googlecode.com/svn-history/r401/trunk/frmFilesInUse.cs (no copyright in code at time of viewing)
         ///
         /// </remarks>
-        static public List<Process> WhoIsLocking(string path)
+        public static List<Process> WhoIsLocking(string path)
         {
             string key = Guid.NewGuid().ToString();
             List<Process> processes = new List<Process>();

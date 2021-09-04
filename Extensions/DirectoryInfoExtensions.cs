@@ -76,7 +76,8 @@ namespace Penguin.IO.Extensions
                         DirectoryInfo = new DirectoryInfo(newPath),
                         Result = DirectoryMoveResultKind.Moved
                     };
-                } else
+                }
+                else
                 {
                     directory.RecursiveMerge(newPath, existingFileBehaviour);
                     return new DirectoryMoveResult()
