@@ -25,7 +25,10 @@ namespace Penguin.IO.Extensions
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         [Obsolete("Use ToDataTable", false)]
-        public static DataTable ReadToDataTable(this FileInfo file, CsvOptions options = null, Func<string, string> ProcessRow = null) => ToDataTable(file, options, ProcessRow);
+        public static DataTable ReadToDataTable(this FileInfo file, CsvOptions options = null, Func<string, string> ProcessRow = null)
+        {
+            return ToDataTable(file, options, ProcessRow);
+        }
 
         /// <summary>
         /// Reads a file to a datatable
@@ -38,7 +41,7 @@ namespace Penguin.IO.Extensions
         {
             options = options ?? new CsvOptions();
 
-            if(file is null)
+            if (file is null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
@@ -47,15 +50,20 @@ namespace Penguin.IO.Extensions
 
             IEnumerable<char> toParse = null;
 
-            if(fileLength < 2_000_000_000)
+            if (fileLength < 2_000_000_000)
             {
                 toParse = File.ReadAllText(file.FullName);
-            } else
+            }
+            else
             {
                 toParse = ReadFile(file.FullName);
             }
 
-            return ToDataTable(toParse.SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r')), options, ProcessRow);
+            DataTable table = ToDataTable(toParse.SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r')), options, ProcessRow);
+
+            table.TableName = Path.GetFileNameWithoutExtension(file.FullName);
+
+            return table;
         }
 
         /// <summary>
@@ -78,6 +86,7 @@ namespace Penguin.IO.Extensions
         {
             return source.SplitQuotedString(new QuotedStringOptions() { RemoveQuotes = false, ItemDelimeter = lineDelimeter });
         }
+
         /// <summary>
         /// Reads an IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values
         /// </summary>
@@ -116,12 +125,13 @@ namespace Penguin.IO.Extensions
             using (StreamReader sr = new StreamReader(filePath))
             {
                 int i;
-                while((i = sr.Read()) != -1)
+                while ((i = sr.Read()) != -1)
                 {
                     yield return (char)i;
                 }
             }
         }
+
         /// <summary>
         /// Reads a list of strings representing CSV lines to a datatable
         /// </summary>
@@ -130,7 +140,10 @@ namespace Penguin.IO.Extensions
         /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         [Obsolete("Use ToDataTable", false)]
-        public static DataTable ReadToDataTable(this IEnumerable<string> FileLines, CsvOptions options = null, Func<string, string> ProcessRow = null) => FileLines.ToDataTable(options, ProcessRow);
+        public static DataTable ReadToDataTable(this IEnumerable<string> FileLines, CsvOptions options = null, Func<string, string> ProcessRow = null)
+        {
+            return FileLines.ToDataTable(options, ProcessRow);
+        }
 
         /// <summary>
         /// Moves a file info to a new location, allowing specification of behaviour
@@ -160,9 +173,10 @@ namespace Penguin.IO.Extensions
                     FileInfo = new FileInfo(newPath),
                     Result = FileMoveResultKind.Moved
                 };
-            } else
+            }
+            else
             {
-                switch(behaviour)
+                switch (behaviour)
                 {
                     case ExistingFileBehaviour.Error:
                         throw new FileAlreadyExistsException();
@@ -231,7 +245,7 @@ namespace Penguin.IO.Extensions
             }
             else
             {
-                if(!hasNextLine)
+                if (!hasNextLine)
                 {
                     throw new ArgumentException(NO_LINES_MESSAGE, nameof(FileLines));
                 }

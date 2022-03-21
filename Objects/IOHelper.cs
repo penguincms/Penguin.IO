@@ -73,9 +73,8 @@ namespace Penguin.IO.Objects
             string strSize = "b";
 
             int b = 0;
-            
-            float fSize = size;
 
+            float fSize = size;
 
             while (fSize >= 1000)
             {
@@ -89,15 +88,19 @@ namespace Penguin.IO.Objects
                 case 0:
                     strSize = "b";
                     break;
+
                 case 1:
                     strSize = "Kb";
                     break;
+
                 case 2:
                     strSize = "Mb";
                     break;
+
                 case 3:
                     strSize = "Gb";
                     break;
+
                 case 4:
                     strSize = "Tb";
                     break;
