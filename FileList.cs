@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,19 +28,26 @@ namespace Penguin.IO
 
             string testPath = Path.Combine(this.Root, inclusion.Path);
 
-            List<string> files;
+            List<string> files = new List<string>();
 
-            if (Directory.Exists(testPath))
+            try
             {
-                files = Directory.EnumerateFiles(testPath, "*", inclusion.SearchOption).ToList();
-            }
-            else if (File.Exists(testPath))
+                if (Directory.Exists(testPath))
+                {
+                    files = Directory.EnumerateFiles(testPath, "*", inclusion.SearchOption).ToList();
+                }
+                else if (File.Exists(testPath))
+                {
+                    files = new List<string> { testPath };
+                }
+                else if (Directory.Exists(this.Root))
+                {
+                    Console.WriteLine($"\t{this.Root}\t{inclusion.Path}\t{inclusion.SearchOption}");
+                    files = Directory.EnumerateFiles(this.Root, inclusion.Path, inclusion.SearchOption).ToList();
+                }
+            } catch(DirectoryNotFoundException)
             {
-                files = new List<string> { testPath };
-            }
-            else
-            {
-                files = Directory.EnumerateFiles(this.Root, inclusion.Path, inclusion.SearchOption).ToList();
+                Debug.WriteLine("Directory existence check failure");
             }
 
             foreach (string file in files)
