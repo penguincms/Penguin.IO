@@ -1,5 +1,4 @@
-﻿using Penguin.Extensions.Collections;
-using Penguin.Extensions.Strings;
+﻿using Penguin.Extensions.String;
 using Penguin.IO.Exceptions;
 using Penguin.IO.Objects;
 using System;

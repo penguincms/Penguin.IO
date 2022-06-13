@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Penguin.IO
 {
     public class FileList : IEnumerable<string>
     {
-        HashSet<string> Results = new HashSet<string>();
-        
+        private HashSet<string> Results = new HashSet<string>();
+
         private string Root { get; set; }
-        
+
         public FileList(string root = null)
         {
             this.Root = root ?? Directory.GetCurrentDirectory();
@@ -45,19 +44,26 @@ namespace Penguin.IO
                     Console.WriteLine($"\t{this.Root}\t{inclusion.Path}\t{inclusion.SearchOption}");
                     files = Directory.EnumerateFiles(this.Root, inclusion.Path, inclusion.SearchOption).ToList();
                 }
-            } catch(DirectoryNotFoundException)
+            }
+            catch (DirectoryNotFoundException)
             {
                 Debug.WriteLine("Directory existence check failure");
             }
 
             foreach (string file in files)
             {
-                _ = inclusion.Exclude ? Results.Remove(file) : Results.Add(file);
+                _ = inclusion.Exclude ? this.Results.Remove(file) : this.Results.Add(file);
             }
         }
 
-        public IEnumerator<string> GetEnumerator() => this.Results.ToList().GetEnumerator();
-        
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        public IEnumerator<string> GetEnumerator()
+        {
+            return this.Results.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
 }
