@@ -15,21 +15,17 @@ namespace Penguin.IO.Serialization
         /// <returns>The deserialized object</returns>
         public static T ToObject<T>(string source)
         {
-            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(T));
+            System.Xml.Serialization.XmlSerializer ser = new(typeof(T));
 
             if (File.Exists(source))
             {
-                using (StringReader sr = new StringReader(File.ReadAllText(source)))
-                {
-                    return (T)ser.Deserialize(sr);
-                }
+                using StringReader sr = new(File.ReadAllText(source));
+                return (T)ser.Deserialize(sr);
             }
             else
             {
-                using (StringReader sr = new StringReader(source))
-                {
-                    return (T)ser.Deserialize(sr);
-                }
+                using StringReader sr = new(source);
+                return (T)ser.Deserialize(sr);
             }
         }
     }

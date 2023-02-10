@@ -23,7 +23,7 @@ namespace Penguin.IO.Objects
         public static List<Process> WhoIsLocking(string path)
         {
             string key = Guid.NewGuid().ToString();
-            List<Process> processes = new List<Process>();
+            List<Process> processes = new();
 
             int res = RmStartSession(out uint handle, 0, key);
             if (res != 0)
@@ -88,7 +88,7 @@ namespace Penguin.IO.Objects
             }
             finally
             {
-                RmEndSession(handle);
+                _ = RmEndSession(handle);
             }
 
             return processes;

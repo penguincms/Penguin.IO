@@ -14,7 +14,7 @@ namespace Penguin.IO.Objects
         /// <returns>The free path, either original or renamed</returns>
         public static string FindFileName(string path)
         {
-            FileInfo fi = new FileInfo(path);
+            FileInfo fi = new(path);
             DirectoryInfo di = fi.Directory;
 
             string originalFileName = Path.GetFileNameWithoutExtension(path);
@@ -46,7 +46,7 @@ namespace Penguin.IO.Objects
         /// <returns>The free path, either original or renamed</returns>
         public static string FindDirectoryName(string path)
         {
-            DirectoryInfo di = new DirectoryInfo(path);
+            DirectoryInfo di = new(path);
 
             string originalFolderName = di.Name;
 

@@ -63,7 +63,7 @@ namespace Penguin.IO.Extensions
                 throw new ArgumentException($"'{nameof(newPath)}' cannot be null or whitespace.", nameof(newPath));
             }
 
-            DirectoryInfo newDir = new DirectoryInfo(newPath);
+            DirectoryInfo newDir = new(newPath);
 
             if (!Directory.Exists(newPath))
             {
@@ -79,7 +79,7 @@ namespace Penguin.IO.Extensions
                 }
                 else
                 {
-                    directory.RecursiveMerge(newPath, existingFileBehaviour);
+                    _ = directory.RecursiveMerge(newPath, existingFileBehaviour);
                     return new DirectoryMoveResult()
                     {
                         DirectoryInfo = new DirectoryInfo(newPath),
@@ -94,7 +94,7 @@ namespace Penguin.IO.Extensions
                     case ExistingDirectoryBehaviour.Error:
                         throw new DirectoryAlreadyExistsException();
                     case ExistingDirectoryBehaviour.Merge:
-                        directory.RecursiveMerge(newPath, existingFileBehaviour);
+                        _ = directory.RecursiveMerge(newPath, existingFileBehaviour);
                         return new DirectoryMoveResult()
                         {
                             DirectoryInfo = new DirectoryInfo(newPath),
@@ -135,12 +135,12 @@ namespace Penguin.IO.Extensions
                 throw new DirectoryNotFoundException(newPath);
             }
 
-            source.RecursiveMerge(newPath, existingFileBehaviour);
+            _ = source.RecursiveMerge(newPath, existingFileBehaviour);
         }
 
         private static List<FileMoveResult> RecursiveMerge(this DirectoryInfo source, string newpath, ExistingFileBehaviour existingFileBehaviour = ExistingFileBehaviour.Error)
         {
-            List<FileMoveInfo> MoveInfo = new List<FileMoveInfo>();
+            List<FileMoveInfo> MoveInfo = new();
 
             foreach (FileInfo fi in source.EnumerateFiles("*", SearchOption.AllDirectories))
             {
@@ -166,7 +166,7 @@ namespace Penguin.IO.Extensions
                     parentDirectory.Create();
                 }
 
-                thisMoveInfo.Source.MoveTo(thisMoveInfo.TargetPath, existingFileBehaviour);
+                _ = thisMoveInfo.Source.MoveTo(thisMoveInfo.TargetPath, existingFileBehaviour);
             }
 
             List<DirectoryInfo> toRemove = source.EnumerateDirectories("*", SearchOption.AllDirectories).OrderByDescending(d => d.FullName.Length).ToList();
@@ -189,7 +189,7 @@ namespace Penguin.IO.Extensions
 
         private static IEnumerable<T> EnumerateEntries<T>(this DirectoryInfo di, Action<DirectoryInfo, Exception> onError, string searchPattern = "*", SearchOption searchOption = SearchOption.AllDirectories) where T : FileSystemInfo
         {
-            Queue<DirectoryInfo> directories = new Queue<DirectoryInfo>();
+            Queue<DirectoryInfo> directories = new();
 
             directories.Enqueue(di);
 
@@ -197,7 +197,7 @@ namespace Penguin.IO.Extensions
             {
                 DirectoryInfo thisDir = directories.Dequeue();
 
-                List<T> entries = new List<T>();
+                List<T> entries = new();
 
                 try
                 {

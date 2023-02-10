@@ -9,13 +9,13 @@ namespace Penguin.IO
 {
     public class FileList : IEnumerable<string>
     {
-        private HashSet<string> Results = new HashSet<string>();
+        private readonly HashSet<string> Results = new();
 
         private string Root { get; set; }
 
         public FileList(string root = null)
         {
-            this.Root = root ?? Directory.GetCurrentDirectory();
+            Root = root ?? Directory.GetCurrentDirectory();
         }
 
         public void AddRule(FileInclusion inclusion)
@@ -25,9 +25,9 @@ namespace Penguin.IO
                 throw new ArgumentNullException(nameof(inclusion));
             }
 
-            string testPath = Path.Combine(this.Root, inclusion.Path);
+            string testPath = Path.Combine(Root, inclusion.Path);
 
-            List<string> files = new List<string>();
+            List<string> files = new();
 
             try
             {
@@ -39,10 +39,10 @@ namespace Penguin.IO
                 {
                     files = new List<string> { testPath };
                 }
-                else if (Directory.Exists(this.Root))
+                else if (Directory.Exists(Root))
                 {
-                    Console.WriteLine($"\t{this.Root}\t{inclusion.Path}\t{inclusion.SearchOption}");
-                    files = Directory.EnumerateFiles(this.Root, inclusion.Path, inclusion.SearchOption).ToList();
+                    Console.WriteLine($"\t{Root}\t{inclusion.Path}\t{inclusion.SearchOption}");
+                    files = Directory.EnumerateFiles(Root, inclusion.Path, inclusion.SearchOption).ToList();
                 }
             }
             catch (DirectoryNotFoundException)
@@ -52,18 +52,18 @@ namespace Penguin.IO
 
             foreach (string file in files)
             {
-                _ = inclusion.Exclude ? this.Results.Remove(file) : this.Results.Add(file);
+                _ = inclusion.Exclude ? Results.Remove(file) : Results.Add(file);
             }
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            return this.Results.ToList().GetEnumerator();
+            return Results.ToList().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

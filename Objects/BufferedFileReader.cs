@@ -12,7 +12,7 @@ namespace Penguin.IO.Objects
         /// <summary>
         /// True if the base reader has reached the end of the stream, and the reader has reached the end of its buffer
         /// </summary>
-        public new bool EndOfStream => this.BufferPointer == this.Buffer.Length && base.EndOfStream;
+        public new bool EndOfStream => BufferPointer == Buffer.Length && base.EndOfStream;
 
         /// <summary>
         /// A decimal representing the % of the way the pointer is through the base stream AND buffer
@@ -21,9 +21,9 @@ namespace Penguin.IO.Objects
         {
             get
             {
-                long Position = base.BaseStream.Position - (this.Buffer.Length - this.BufferPointer);
+                long Position = base.BaseStream.Position - (Buffer.Length - BufferPointer);
 
-                return (Position / (decimal)this.BaseStream.Length) * 100;
+                return Position / (decimal)BaseStream.Length * 100;
             }
         }
 
@@ -34,8 +34,8 @@ namespace Penguin.IO.Objects
         /// <param name="BufferSize">The number of characters of the file to buffer into memory</param>
         public BufferedFileReader(string path, long BufferSize = 20000000) : base(path)
         {
-            this.Buffer = new char[BufferSize];
-            this.FillBuffer();
+            Buffer = new char[BufferSize];
+            FillBuffer();
         }
 
         /// <summary>
@@ -44,30 +44,30 @@ namespace Penguin.IO.Objects
         /// <returns>The next int from the buffer</returns>
         public override int Read()
         {
-            if (this.BufferPointer == this.Buffer.Length)
+            if (BufferPointer == Buffer.Length)
             {
-                this.FillBuffer();
+                FillBuffer();
             }
 
-            return this.Buffer[this.BufferPointer++];
+            return Buffer[BufferPointer++];
         }
 
         private char[] Buffer;
-        private long BufferPointer = 0;
+        private long BufferPointer;
 
         private void FillBuffer()
         {
-            this.BufferPointer = 0;
+            BufferPointer = 0;
 
-            long ReadLength = this.Buffer.Length;
+            long ReadLength = Buffer.Length;
 
-            if (base.BaseStream.Position + (ReadLength * sizeof(char)) > this.BaseStream.Length)
+            if (base.BaseStream.Position + (ReadLength * sizeof(char)) > BaseStream.Length)
             {
                 ReadLength = base.BaseStream.Length - base.BaseStream.Position;
-                this.Buffer = new char[ReadLength];
+                Buffer = new char[ReadLength];
             }
 
-            base.Read(this.Buffer, 0, (int)ReadLength);
+            _ = base.Read(Buffer, 0, (int)ReadLength);
         }
     }
 }

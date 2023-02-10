@@ -17,13 +17,13 @@ namespace Penguin.IO.Objects
                 throw new ArgumentException($"'{nameof(rootTarget)}' cannot be null or whitespace.", nameof(rootTarget));
             }
 
-            this.Source = source ?? throw new ArgumentNullException(nameof(source));
-            this.TargetPath = Path.Combine(rootTarget, source.FullName.Substring(rootSource.Length + 1));
+            Source = source ?? throw new ArgumentNullException(nameof(source));
+            TargetPath = Path.Combine(rootTarget, source.FullName[(rootSource.Length + 1)..]);
         }
 
         public FileInfo Source { get; set; }
         public string TargetPath { get; set; }
-        public bool TargetExists => new FileInfo(this.TargetPath).Exists;
+        public bool TargetExists => new FileInfo(TargetPath).Exists;
         public FileMoveResult Result { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace Penguin.IO.Extensions
         /// <returns>A data table representing the contents of the source fileinfo</returns>
         public static DataTable ToDataTable(this FileInfo file, CsvOptions options = null, Func<string, string> ProcessRow = null)
         {
-            options = options ?? new CsvOptions();
+            options ??= new CsvOptions();
 
             if (file is null)
             {
@@ -47,17 +47,7 @@ namespace Penguin.IO.Extensions
 
             long fileLength = file.Length;
 
-            IEnumerable<char> toParse = null;
-
-            if (fileLength < 2_000_000_000)
-            {
-                toParse = File.ReadAllText(file.FullName);
-            }
-            else
-            {
-                toParse = ReadFile(file.FullName);
-            }
-
+            IEnumerable<char> toParse = fileLength < 2_000_000_000 ? File.ReadAllText(file.FullName) : ReadFile(file.FullName);
             DataTable table = ToDataTable(toParse.SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r')), options, ProcessRow);
 
             table.TableName = Path.GetFileNameWithoutExtension(file.FullName);
@@ -73,12 +63,9 @@ namespace Penguin.IO.Extensions
         /// <returns>An IEnumerable of CSV lines</returns>
         public static IEnumerable<string> ReadCsvLines(this FileInfo fi, char lineDelimeter = '\n')
         {
-            if (fi is null)
-            {
-                throw new ArgumentNullException(nameof(fi));
-            }
-
-            return ReadFile(fi).SplitCsvLines(lineDelimeter).Select(l => l.Trim('\r'));
+            return fi is null
+                ? throw new ArgumentNullException(nameof(fi))
+                : ReadFile(fi).SplitCsvLines(lineDelimeter).Select(l => l.Trim('\r'));
         }
 
         private static IEnumerable<string> SplitCsvLines(this IEnumerable<char> source, char lineDelimeter)
@@ -94,14 +81,11 @@ namespace Penguin.IO.Extensions
         /// <returns>An IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values</returns>
         public static IEnumerable<IEnumerable<string>> ReadCsvItems(this FileInfo fi, CsvOptions options = null)
         {
-            options = options ?? new CsvOptions();
+            options ??= new CsvOptions();
 
-            if (fi is null)
-            {
-                throw new ArgumentNullException(nameof(fi));
-            }
-
-            return ReadFile(fi).SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r').SplitQuotedString(options));
+            return fi is null
+                ? throw new ArgumentNullException(nameof(fi))
+                : ReadFile(fi).SplitCsvLines(options.LineDelimeter).Select(l => l.Trim('\r').SplitQuotedString(options));
         }
 
         /// <summary>
@@ -111,23 +95,16 @@ namespace Penguin.IO.Extensions
         /// <returns>The IEnumerable of characters representing the content</returns>
         public static IEnumerable<char> ReadFile(this FileInfo fi)
         {
-            if (fi is null)
-            {
-                throw new ArgumentNullException(nameof(fi));
-            }
-
-            return ReadFile(fi.FullName);
+            return fi is null ? throw new ArgumentNullException(nameof(fi)) : ReadFile(fi.FullName);
         }
 
         private static IEnumerable<char> ReadFile(string filePath)
         {
-            using (StreamReader sr = new StreamReader(filePath))
+            using StreamReader sr = new(filePath);
+            int i;
+            while ((i = sr.Read()) != -1)
             {
-                int i;
-                while ((i = sr.Read()) != -1)
-                {
-                    yield return (char)i;
-                }
+                yield return (char)i;
             }
         }
 
@@ -220,14 +197,14 @@ namespace Penguin.IO.Extensions
 
         public static DataTable ToDataTable(this IEnumerable<string> FileLines, CsvOptions options = null, Func<string, string> ProcessRow = null)
         {
-            options = options ?? new CsvOptions();
+            options ??= new CsvOptions();
 
             if (FileLines is null)
             {
                 throw new ArgumentNullException(nameof(FileLines));
             }
 
-            DataTable toReturn = new DataTable();
+            DataTable toReturn = new();
 
             IEnumerator<string> LinesEnumerator = FileLines.GetEnumerator();
 
@@ -257,7 +234,7 @@ namespace Penguin.IO.Extensions
 
             while (hasNextLine)
             {
-                List<object> items = new List<object>();
+                List<object> items = new();
 
                 foreach (string Column in LinesEnumerator.Current.SplitQuotedString(options))
                 {

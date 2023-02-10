@@ -18,19 +18,15 @@ namespace Penguin.IO.Compression
         {
             byte[] bytes = Encoding.UTF8.GetBytes(source);
 
-            using (MemoryStream msi = new MemoryStream(bytes))
+            using MemoryStream msi = new(bytes);
+            using MemoryStream mso = new();
+            using (GZipStream gs = new(mso, CompressionMode.Compress))
             {
-                using (MemoryStream mso = new MemoryStream())
-                {
-                    using (GZipStream gs = new GZipStream(mso, CompressionMode.Compress))
-                    {
-                        //msi.CopyTo(gs);
-                        CopyTo(msi, gs);
-                    }
-
-                    return mso.ToArray();
-                }
+                //msi.CopyTo(gs);
+                CopyTo(msi, gs);
             }
+
+            return mso.ToArray();
         }
 
         /// <summary>
@@ -67,19 +63,15 @@ namespace Penguin.IO.Compression
         /// <returns>The original string before it was compressed</returns>
         public static string Decompress(byte[] source)
         {
-            using (MemoryStream msi = new MemoryStream(source))
+            using MemoryStream msi = new(source);
+            using MemoryStream mso = new();
+            using (GZipStream gs = new(msi, CompressionMode.Decompress))
             {
-                using (MemoryStream mso = new MemoryStream())
-                {
-                    using (GZipStream gs = new GZipStream(msi, CompressionMode.Decompress))
-                    {
-                        //gs.CopyTo(mso);
-                        CopyTo(gs, mso);
-                    }
-
-                    return Encoding.UTF8.GetString(mso.ToArray());
-                }
+                //gs.CopyTo(mso);
+                CopyTo(gs, mso);
             }
+
+            return Encoding.UTF8.GetString(mso.ToArray());
         }
     }
 }
