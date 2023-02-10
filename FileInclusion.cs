@@ -6,7 +6,9 @@ namespace Penguin.IO
     public class FileInclusion
     {
         public string Path { get; set; }
+
         public bool Recursive { get; set; } = true;
+
         public bool Exclude { get; set; }
 
         public FileInclusion(string path, bool include = true, bool recursive = true)

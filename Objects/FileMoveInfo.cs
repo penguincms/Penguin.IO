@@ -22,8 +22,11 @@ namespace Penguin.IO.Objects
         }
 
         public FileInfo Source { get; set; }
+
         public string TargetPath { get; set; }
+
         public bool TargetExists => new FileInfo(TargetPath).Exists;
+
         public FileMoveResult Result { get; set; }
     }
 }

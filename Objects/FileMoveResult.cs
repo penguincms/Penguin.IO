@@ -13,6 +13,7 @@ namespace Penguin.IO.Objects
     public class FileMoveResult
     {
         public FileInfo FileInfo { get; set; }
+
         public FileMoveResultKind Result { get; set; }
     }
 }

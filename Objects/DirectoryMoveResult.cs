@@ -13,6 +13,7 @@ namespace Penguin.IO.Objects
     public class DirectoryMoveResult
     {
         public DirectoryInfo DirectoryInfo { get; set; }
+
         public DirectoryMoveResultKind Result { get; set; }
     }
 }
