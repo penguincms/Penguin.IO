@@ -81,14 +81,6 @@ namespace Penguin.IO.Extensions
             }
         }
 
-        /// <summary>
-        /// Reads a list of strings representing CSV lines to a datatable
-        /// </summary>
-        /// <param name="FileLines">The CSV lines</param>
-        /// <param name="options">Optional csv parsing options</param>
-        /// <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
-        /// <returns>A data table representing the contents of the source fileinfo</returns>
-
    
     }
 }

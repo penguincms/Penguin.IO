@@ -75,56 +75,6 @@
             <param name="searchOption">Recursive or not. Recursive by default</param>
             <returns></returns>
         </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadToDataTable(System.IO.FileInfo,Penguin.IO.CsvOptions,System.Func{System.String,System.String})">
-            <summary>
-            Reads a file to a datatable
-            </summary>
-            <param name="file">The file info to read</param>
-            <param name="options">Optional Csv parsing options</param>
-            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
-            <returns>A data table representing the contents of the source fileinfo</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ToDataTable(System.IO.FileInfo,Penguin.IO.CsvOptions,System.Func{System.String,System.String})">
-            <summary>
-            Reads a file to a datatable
-            </summary>
-            <param name="file">The file info to read</param>
-            <param name="options">Optional Csv parsing options</param>
-            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
-            <returns>A data table representing the contents of the source fileinfo</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadCsvLines(System.IO.FileInfo,System.Char)">
-            <summary>
-            Reads a file as an IEnumerable of strings, seperated by CSV line. This means that CSV cells may contain newlines
-            </summary>
-            <param name="fi">the File Info</param>
-            <param name="lineDelimeter">The character to be user for line breaks</param>
-            <returns>An IEnumerable of CSV lines</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadCsvItems(System.IO.FileInfo,Penguin.IO.CsvOptions)">
-            <summary>
-            Reads an IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values
-            </summary>
-            <param name="fi">The file info to read</param>
-            <param name="options"></param>
-            <returns>An IEnumerable of CSV lines, each containing an IEnumerable of CSV cell values</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadFile(System.IO.FileInfo)">
-            <summary>
-            Reads a file as an IEnumerable of characters
-            </summary>
-            <param name="fi">The file to read</param>
-            <returns>The IEnumerable of characters representing the content</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ReadToDataTable(System.Collections.Generic.IEnumerable{System.String},Penguin.IO.CsvOptions,System.Func{System.String,System.String})">
-            <summary>
-            Reads a list of strings representing CSV lines to a datatable
-            </summary>
-            <param name="FileLines">The CSV lines</param>
-            <param name="options">Optional csv parsing options</param>
-            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
-            <returns>A data table representing the contents of the source fileinfo</returns>
-        </member>
         <member name="M:Penguin.IO.Extensions.FileInfoExtensions.MoveTo(System.IO.FileInfo,System.String,Penguin.IO.Objects.ExistingFileBehaviour)">
             <summary>
             Moves a file info to a new location, allowing specification of behaviour
@@ -133,15 +83,6 @@
             <param name="newPath">The target path for the file</param>
             <param name="behaviour">How conflicting files should be handled</param>
             <returns>An object containing information relevant to the operation</returns>
-        </member>
-        <member name="M:Penguin.IO.Extensions.FileInfoExtensions.ToDataTable(System.Collections.Generic.IEnumerable{System.String},Penguin.IO.CsvOptions,System.Func{System.String,System.String})">
-            <summary>
-            Reads a list of strings representing CSV lines to a datatable
-            </summary>
-            <param name="FileLines">The CSV lines</param>
-            <param name="options">Optional csv parsing options</param>
-            <param name="ProcessRow">A function to be called once per row to alter the row contents</param>
-            <returns>A data table representing the contents of the source fileinfo</returns>
         </member>
         <member name="M:Penguin.IO.Extensions.StreamExtensions.ReadFully(System.IO.Stream,System.Int32)">
             <summary>
@@ -194,6 +135,7 @@
              <remarks>See also:
              http://msdn.microsoft.com/en-us/library/windows/desktop/aa373661(v=vs.85).aspx
              http://wyupdate.googlecode.com/svn-history/r401/trunk/frmFilesInUse.cs (no copyright in code at time of viewing)
+            
              </remarks>
         </member>
         <member name="M:Penguin.IO.Objects.IOHelper.FindFileName(System.String)">
